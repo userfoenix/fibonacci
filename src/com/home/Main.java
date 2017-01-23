@@ -7,7 +7,7 @@ public class Main {
         int pool_size = 5;
 
         PerformanceTesterImpl tester = new PerformanceTesterImpl();
-        
+
         try {
             FibCalcImpl fib = new FibCalcImpl(n, tester);
             PerformanceTestResult res = tester.runPerformanceTest(

@@ -1,7 +1,9 @@
 package com.home;
 
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -14,7 +16,7 @@ public class PerformanceTesterImpl implements PerformanceTester {
 
     public synchronized void syncTime(long tm) {
         this.totalTime += tm;
-        this.minTime = minTime==0 || tm < minTime ? tm : minTime;
+        this.minTime = minTime == 0 || tm < minTime ? tm : minTime;
         this.maxTime = tm > maxTime ? tm : maxTime;
     }
 
@@ -23,7 +25,14 @@ public class PerformanceTesterImpl implements PerformanceTester {
             int executionCount,
             int threadPoolSize) throws InterruptedException {
 
-        ExecutorService executor = Executors.newFixedThreadPool(threadPoolSize);
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(
+                threadPoolSize,
+                threadPoolSize,
+                1,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>()
+        );
+        executor.prestartAllCoreThreads();
         for (int i = 0; i < executionCount; i++) {
             executor.execute(task);
         }

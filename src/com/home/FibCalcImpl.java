@@ -20,7 +20,7 @@ public class FibCalcImpl implements FibCalc, Runnable {
         long res = fib(n);
         long tm = watcher.stop();
         tester.syncTime(tm);
-        System.out.println("tm="+tm);
+//        System.out.println("tm="+tm);
     }
 
     /**
